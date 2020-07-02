@@ -51,4 +51,15 @@ public class CustomerServiceTest {
         Mockito.verify(accountRepository, times(1)).findByCustomer(testCustomer);
         assertEquals(1, accounts.size());
     }
+
+    @Test
+    public void deleteCustomerAccountTest() {
+        Customer customer = new Customer();
+        customer.setId(1L);
+        Account account = new Account();
+        account.setId(5L);
+        account.setCustomer(customer);
+        customerService.deleteCustomerAccount(1L, 5L);
+        Mockito.verify(accountRepository, times(1)).delete(account);
+    }
 }

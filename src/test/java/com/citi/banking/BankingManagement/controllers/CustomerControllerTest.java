@@ -47,4 +47,14 @@ public class CustomerControllerTest {
                 .expectStatus().isOk();
         Mockito.verify(customerService, times(1)).retrieveAccountsForCustomer(5L);
     }
+
+    @Test
+    public void returnStatusOkForDeleteAccountForCustomer() {
+        webTestClient.delete()
+                .uri("/customers/5/accounts/1")
+                .exchange()
+                .expectStatus().isOk();
+        Mockito.verify(customerService, times(1))
+                .deleteCustomerAccount(5L, 1L);
+    }
 }

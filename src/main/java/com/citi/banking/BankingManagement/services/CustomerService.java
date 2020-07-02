@@ -30,4 +30,12 @@ public class CustomerService {
         return this.accountRepository.findByCustomer(customer);
     }
 
+    public void deleteCustomerAccount(Long customerId, Long accountId) {
+        Customer customer = new Customer();
+        customer.setId(customerId);
+        Account account = new Account();
+        account.setId(accountId);
+        account.setCustomer(customer);
+        this.accountRepository.delete(account);
+    }
 }

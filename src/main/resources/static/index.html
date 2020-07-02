@@ -11,19 +11,43 @@
         $(document).ready(function(){
             $.get("/customers", function(data, status){
                 $.each( data, function( index, value ){
-                    var markup = "<tr><td class='id' id='" + value.id + "'>" + value.firstName + "</td><td>" + value.lastName + "</td></tr>";
+                    var markup = 
+                        "<tr><td class='id' id='" 
+                                    + value.id + "'>" 
+                                    + value.firstName + "</td><td>" + 
+                                    value.lastName + 
+                        "</td></tr>";
                     $("#customers_table tbody").append(markup);
                 });
             });
+            var customerId = 0;
             $(document).on("click", "#customers_table tr" , function() {
-                var customerId = $(this).find("td.id").attr("id");
+                customerId = $(this).find("td.id").attr("id");
                 $("#accounts_table tbody").empty();
                 $.get("/customers/"+ customerId + "/accounts", function(data, status){
                     $.each( data, function( index, value ){
-                        var markup = "<tr><td>" + value.type + "</td><td>" + value.amount + "</td></tr>";
+                        var markup = 
+                            "<tr id=account_" + value.id+ "><td>" 
+                                + value.type 
+                                + "</td><td>" 
+                                + value.amount 
+                                + "</td><td><button type='button' class='delete-account btn btn-primary' id='" 
+                                + value.id + 
+                            "'>Delete</button></td></tr>";
                         $("#accounts_table tbody").append(markup);
                     });
                 });
+            });
+            $(document).on("click", ".delete-account" , function() {
+                var accountId = $(this).attr("id");
+                var deleteCustomerAccountUrl = "/customers/"+ customerId + "/accounts/" + accountId;
+                $.ajax({
+                        url: deleteCustomerAccountUrl,
+                        type: 'DELETE',
+                        success: function(result) {
+                            $('#account_'+accountId).remove();
+                        }
+                    });
             });
         });
     </script>
@@ -54,6 +78,7 @@
                 <tr>
                     <th>Type</th>
                     <th>Amount(USD)</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
