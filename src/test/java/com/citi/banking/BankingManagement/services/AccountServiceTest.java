@@ -46,7 +46,7 @@ public class AccountServiceTest {
         Optional<Account> account = accountService.retrieveAccount(3L);
         Mockito.verify(accountRepository, times(1)).findById(3L);
         assertTrue(account.isPresent());
-        assertEquals(AccountType.SAVINGS, account.get().getType());
+        assertEquals(AccountType.CHECKING, account.get().getType());
     }
 
     @Test

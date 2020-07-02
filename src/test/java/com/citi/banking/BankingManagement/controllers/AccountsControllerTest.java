@@ -63,7 +63,9 @@ public class AccountsControllerTest {
 
     @Test
     public void returnStatusOkForCreateNewAccount() {
-        Account account = new Account(AccountType.CHECKING, new BigDecimal(100));
+        Account account = new Account();
+        account.setType(AccountType.CHECKING);
+        account.setAmount(new BigDecimal(200));
         webTestClient.post()
                 .uri("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -75,7 +77,9 @@ public class AccountsControllerTest {
 
     @Test
     public void returnStatusOkForUpdateAccount() {
-        Account account = new Account(AccountType.CHECKING, new BigDecimal(100));
+        Account account = new Account();
+        account.setType(AccountType.CHECKING);
+        account.setAmount(new BigDecimal(200));
         webTestClient.put()
                 .uri("/accounts/1")
                 .contentType(MediaType.APPLICATION_JSON)

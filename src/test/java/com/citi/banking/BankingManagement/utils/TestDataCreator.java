@@ -17,7 +17,10 @@ public class TestDataCreator {
     }
 
     public static Account createMockAccount() {
-        return new Account(AccountType.SAVINGS, new BigDecimal(100));
+        Account account = new Account();
+        account.setType(AccountType.CHECKING);
+        account.setAmount(new BigDecimal(200));
+        return account;
     }
 
     public static List<Customer> createMockCustomers() {

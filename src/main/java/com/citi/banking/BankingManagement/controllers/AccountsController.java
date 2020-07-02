@@ -3,8 +3,7 @@ package com.citi.banking.BankingManagement.controllers;
 import com.citi.banking.BankingManagement.entities.Account;
 import com.citi.banking.BankingManagement.exceptions.AccountNotFoundException;
 import com.citi.banking.BankingManagement.services.AccountService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/accounts")
+@Slf4j
 class AccountsController {
-    private Logger log = LoggerFactory.getLogger(AccountsController.class);
     private final AccountService accountService;
 
     AccountsController(AccountService accountService) {
