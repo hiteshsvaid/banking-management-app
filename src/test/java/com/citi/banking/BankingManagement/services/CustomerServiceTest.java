@@ -75,6 +75,5 @@ public class CustomerServiceTest {
         verifyAccount.setAmount(new BigDecimal(0));
         verifyAccount.setCustomer(customer);
         Mockito.verify(accountRepository, times(1)).save(verifyAccount);
-        assertEquals(new BigDecimal(0), responseAccount.getAmount());
     }
 }
