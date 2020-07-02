@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -71,7 +72,9 @@ public class CustomerServiceTest {
         Account verifyAccount = TestDataCreator.createMockAccount();
         Customer customer = new Customer();
         customer.setId(3L);
+        verifyAccount.setAmount(new BigDecimal(0));
         verifyAccount.setCustomer(customer);
         Mockito.verify(accountRepository, times(1)).save(verifyAccount);
+        assertEquals(new BigDecimal(0), responseAccount.getAmount());
     }
 }

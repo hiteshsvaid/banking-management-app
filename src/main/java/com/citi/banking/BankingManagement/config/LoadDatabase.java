@@ -23,17 +23,18 @@ public class LoadDatabase {
 
             Customer customer = createCustomer("John", "Doe", "123 Hollow Street", "898099321", "829-292-9998");
             log.info("Preloading " + customerRepository.save(customer));
-            accountRepository.save(createAccount(customer, new BigDecimal(3200), AccountType.CHECKING));
-            accountRepository.save(createAccount(customer, new BigDecimal(4500), AccountType.MONEY_MARKET));
+            accountRepository.save(createAccount(customer, new BigDecimal(3200), AccountType.CHECKING, "My Checking"));
+            accountRepository.save(createAccount(customer, new BigDecimal(4500), AccountType.MONEY_MARKET, "Stock Account"));
 
             Customer customer2 = createCustomer("Smith", "Thomson", "232 Hidden Street", "823099321", "729-292-9965");
             log.info("Preloading " + customerRepository.save(customer2));
-            accountRepository.save(createAccount(customer2, new BigDecimal(300), AccountType.SAVINGS));
+            accountRepository.save(createAccount(customer2, new BigDecimal(300), AccountType.SAVINGS, "My Saving"));
         };
     }
 
-    private Account createAccount(Customer customer, BigDecimal amount, AccountType accountType) {
+    private Account createAccount(Customer customer, BigDecimal amount, AccountType accountType, String nickName) {
         Account account = new Account();
+        account.setNickName(nickName);
         account.setType(accountType);
         account.setAmount(amount);
         account.setCustomer(customer);
