@@ -12,6 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.Optional;
+
 import static org.mockito.Mockito.times;
 
 @ExtendWith(SpringExtension.class)
@@ -33,5 +35,16 @@ public class CustomerControllerTest {
                 .expectStatus().isOk();
 
         Mockito.verify(customerService, times(1)).retrieveCustomers();
+    }
+
+    @Test
+    public void returnStatusOkForRetrieveSpecificCustomer() {
+        Mockito.when(customerService.retrieveAccountsForCustomer(5L)).thenReturn(TestDataCreator.createMockAccounts());
+
+        webTestClient.get()
+                .uri("/customers/5/accounts")
+                .exchange()
+                .expectStatus().isOk();
+        Mockito.verify(customerService, times(1)).retrieveAccountsForCustomer(5L);
     }
 }

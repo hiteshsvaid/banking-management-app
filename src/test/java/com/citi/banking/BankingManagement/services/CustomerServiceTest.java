@@ -25,16 +25,30 @@ public class CustomerServiceTest {
     @MockBean
     private CustomerRepository customerRepository;
 
+    @MockBean
+    private AccountRepository accountRepository;
+
     @BeforeEach
     public void before() {
-        customerService = new CustomerService(customerRepository);
+        customerService = new CustomerService(customerRepository, accountRepository);
     }
 
     @Test
-    public void retrieveAccountsTest() {
+    public void retrieveCustomersTest() {
         when(customerRepository.findAll()).thenReturn(TestDataCreator.createMockCustomers());
         List<Customer> customers = customerService.retrieveCustomers();
         Mockito.verify(customerRepository, times(1)).findAll();
         assertEquals(1, customers.size());
+    }
+
+    @Test
+    public void retrieveAccountsForCustomerTest() {
+        Customer testCustomer = new Customer();
+        testCustomer.setId(10L);
+        when(accountRepository.findByCustomer(testCustomer))
+                .thenReturn(TestDataCreator.createMockAccounts());
+        List<Account> accounts = customerService.retrieveAccountsForCustomer(10L);
+        Mockito.verify(accountRepository, times(1)).findByCustomer(testCustomer);
+        assertEquals(1, accounts.size());
     }
 }

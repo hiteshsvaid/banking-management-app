@@ -36,7 +36,7 @@ public class AccountService {
                     return accountRepository.save(account);
                 })
                 .orElseGet(() -> {
-                    newAccount.setAccountId(accountId);
+                    newAccount.setId(accountId);
                     return accountRepository.save(newAccount);
                 });
     }

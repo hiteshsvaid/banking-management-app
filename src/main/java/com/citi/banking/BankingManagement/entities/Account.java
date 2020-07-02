@@ -2,9 +2,7 @@ package com.citi.banking.BankingManagement.entities;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -12,9 +10,14 @@ import java.math.BigDecimal;
 public class Account {
     @Id
     @GeneratedValue
-    private Long accountId;
+    private Long id;
     private AccountType type;
     private BigDecimal amount;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
+
 
     public Account(AccountType type, BigDecimal amount) {
         this.type = type;

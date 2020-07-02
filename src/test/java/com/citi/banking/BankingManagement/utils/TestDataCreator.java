@@ -22,13 +22,14 @@ public class TestDataCreator {
 
     public static List<Customer> createMockCustomers() {
         List<Customer> mockCustomers = new ArrayList<>();
-        Customer mockCustomer = createMockCustomer();
+        Customer mockCustomer = createMockCustomer(1L);
         mockCustomers.add(mockCustomer);
         return mockCustomers;
     }
 
-    private static Customer createMockCustomer() {
+    public static Customer createMockCustomer(Long id) {
         Customer customer = new Customer();
+        customer.setId(id);
         customer.setFirstName("Smith");
         customer.setFirstName("Thomson");
         return customer;
