@@ -13,7 +13,16 @@
                 $.each( data, function( index, value ){
                     var markup = "<tr><td>" + value.firstName + "</td><td>" + value.lastName + "</td></tr>";
                     $("#customers_table tbody").append(markup);
-                        });
+                });
+            });
+            $(document).on("click", "#customers_table tr" , function() {
+                alert("row clicked");
+                $.get("/customers/1/accounts", function(data, status){
+                    $.each( data, function( index, value ){
+                        var markup = "<tr><td>" + value.type + "</td><td>" + value.amount + "</td></tr>";
+                        $("#accounts_table tbody").append(markup);
+                    });
+                });
             });
         });
     </script>
@@ -32,7 +41,6 @@
                 </tr>
                 </thead>
                 <tbody>
-               
                 </tbody>
             </table>
         </div>
@@ -48,10 +56,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Checking</td>
-                    <td>200</td>
-                </tr>
                 </tbody>
             </table>
         </div>
