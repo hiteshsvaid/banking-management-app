@@ -1,5 +1,4 @@
 # Banking Management Application
-## Description
 Application with web view and rest services to support management of customer accounts and transfer inter account transfer.
 		
 ## Base package
