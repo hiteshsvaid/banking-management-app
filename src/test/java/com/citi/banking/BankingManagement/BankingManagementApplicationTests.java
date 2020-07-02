@@ -1,10 +1,10 @@
-package com.citi.banking.BankingMangement;
+package com.citi.banking.BankingManagement;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BankingMangementApplicationTests {
+class BankingManagementApplicationTests {
 
 	@Test
 	void contextLoads() {

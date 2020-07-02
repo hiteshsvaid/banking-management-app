@@ -1,4 +1,4 @@
-package com.citi.banking.BankingMangement;
+package com.citi.banking.BankingManagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

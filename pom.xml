@@ -55,6 +55,12 @@
 			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!--h2 in memory database -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
