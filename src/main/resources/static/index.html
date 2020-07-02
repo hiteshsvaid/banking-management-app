@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Banking Application</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var editor;
+        $(document).ready(function(){
+            $.get("/customers", function(data, status){
+                $.each( data, function( index, value ){
+                    var markup = 
+                        "<tr><td class='id' id='" 
+                                    + value.id + "'>" 
+                                    + value.firstName + "</td><td>" + 
+                                    value.lastName + 
+                        "</td></tr>";
+                    $("#customers_table tbody").append(markup);
+                });
+            });
+            var customerId = 0;
+            $(document).on("click", "#customers_table tr" , function() {
+                customerId = $(this).find("td.id").attr("id");
+                $("#accounts_table tbody").empty();
+                $.get("/customers/"+ customerId + "/accounts", function(data, status){
+                    $.each( data, function( index, value ){
+                        var markup = 
+                            "<tr id=account_" + value.id+ "><td>" 
+                                + value.type 
+                                + "</td><td>" 
+                                + value.amount 
+                                + "</td><td><button type='button' class='delete-account btn btn-primary' id='" 
+                                + value.id + 
+                            "'>Delete</button></td></tr>";
+                        $("#accounts_table tbody").append(markup);
+                    });
+                });
+            });
+            $(document).on("click", ".delete-account" , function() {
+                var accountId = $(this).attr("id");
+                var deleteCustomerAccountUrl = "/customers/"+ customerId + "/accounts/" + accountId;
+                $.ajax({
+                        url: deleteCustomerAccountUrl,
+                        type: 'DELETE',
+                        success: function(result) {
+                            $('#account_'+accountId).remove();
+                        }
+                    });
+            });
+        });
+    </script>
+</head>
+<body>
+<h1>Welcome to the Banking Application.</h1>
+<div class="container">
+    <div class="row">
+        <div id="customers" class="col-md-4">
+            Customers
+            <table id="customers_table"  class="table">
+                <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div id="accounts" class="col-md-8">
+            Accounts
+            <a class="editor_create">Create Account</a>
+
+            <table id="accounts_table" class="table">
+                <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Amount(USD)</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

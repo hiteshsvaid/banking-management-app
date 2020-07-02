@@ -11,8 +11,6 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +46,7 @@ public class AccountServiceTest {
         Optional<Account> account = accountService.retrieveAccount(3L);
         Mockito.verify(accountRepository, times(1)).findById(3L);
         assertTrue(account.isPresent());
-        assertEquals(AccountType.SAVINGS, account.get().getType());
+        assertEquals(AccountType.CHECKING, account.get().getType());
     }
 
     @Test
