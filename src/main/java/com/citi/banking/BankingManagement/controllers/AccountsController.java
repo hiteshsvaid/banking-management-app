@@ -2,6 +2,7 @@ package com.citi.banking.BankingManagement.controllers;
 
 import com.citi.banking.BankingManagement.entities.Account;
 import com.citi.banking.BankingManagement.entities.AccountType;
+import com.citi.banking.BankingManagement.exceptions.AccountNotFoundException;
 import com.citi.banking.BankingManagement.services.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,16 +31,16 @@ class AccountsController {
     }
 
     @GetMapping(path = {"/{accountId}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody Account retrieveSpecificAccount(Long accountId) {
-        log.info("Received request: {}", accountId);
-        return new Account(AccountType.CHECKING, new BigDecimal(200));
+    public @ResponseBody Account retrieveSpecificAccount(@PathVariable(value = "accountId") Long accountId) {
+        log.info("RetrieveSpecificAccount for ID: {}", accountId);
+        return accountService.retrieveAccount(accountId).orElseThrow(() -> new AccountNotFoundException(accountId));
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public Long createNewAccount(Account account) {
-        log.info("Received request: {}", account);
-        return new Long(1);
+    public Account createNewAccount(@RequestBody Account account) {
+        log.info("CreateNewAccount for request: {}", account);
+        return accountService.createAccount(account);
     }
 
     @PutMapping(
@@ -47,13 +48,15 @@ class AccountsController {
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.OK)
-    public void updateAccount(String accountId, Account account) {
+    public void updateAccount(@PathVariable(value = "accountId") Long accountId, @RequestBody Account account) {
         log.info("Received update request for id: {} with content {}", accountId, account);
+        accountService.updateAccount(accountId, account);
     }
 
     @DeleteMapping(path = {"/{accountId}"})
     @ResponseStatus(HttpStatus.OK)
-    public void deleteSpecificAccounts(Long accountId) {
-        log.info("Received request: {}", accountId);
+    public void deleteSpecificAccounts(@PathVariable(value = "accountId") Long accountId) {
+        log.info("DeleteSpecificAccounts for ID: {}", accountId);
+        accountService.deleteAccount(accountId);
     }
 }

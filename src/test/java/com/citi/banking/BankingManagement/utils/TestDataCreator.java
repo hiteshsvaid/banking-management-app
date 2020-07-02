@@ -10,8 +10,12 @@ import java.util.List;
 public class TestDataCreator {
     public static List<Account> createMockAccounts() {
         List<Account> mockAccounts = new ArrayList<>();
-        Account mockAccount = new Account(AccountType.SAVINGS, new BigDecimal(100));
+        Account mockAccount = createMockAccount();
         mockAccounts.add(mockAccount);
         return mockAccounts;
+    }
+
+    public static Account createMockAccount() {
+        return new Account(AccountType.SAVINGS, new BigDecimal(100));
     }
 }

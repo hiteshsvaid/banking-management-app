@@ -14,10 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.times;
 
@@ -45,10 +44,21 @@ public class AccountsControllerTest {
 
     @Test
     public void returnStatusOkForRetrieveSpecificAccount() {
+        Mockito.when(accountService.retrieveAccount(5L)).thenReturn(Optional.of(TestDataCreator.createMockAccount()));
+
         webTestClient.get()
-                .uri("/accounts/1")
+                .uri("/accounts/5")
                 .exchange()
                 .expectStatus().isOk();
+        Mockito.verify(accountService, times(1)).retrieveAccount(5L);
+    }
+
+    @Test
+    public void returnStatusNotFoundForRetrieveSpecificAccount() {
+        webTestClient.get()
+                .uri("/accounts/6")
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
@@ -60,6 +70,7 @@ public class AccountsControllerTest {
                 .body(BodyInserters.fromValue(account))
                 .exchange()
                 .expectStatus().isCreated();
+        Mockito.verify(accountService, times(1)).createAccount(account);
     }
 
     @Test
@@ -71,6 +82,7 @@ public class AccountsControllerTest {
                 .body(BodyInserters.fromValue(account))
                 .exchange()
                 .expectStatus().isOk();
+        Mockito.verify(accountService, times(1)).updateAccount(1L, account);
     }
 
     @Test
@@ -79,5 +91,6 @@ public class AccountsControllerTest {
                 .uri("/accounts/2")
                 .exchange()
                 .expectStatus().isOk();
+        Mockito.verify(accountService, times(1)).deleteAccount(2L);
     }
 }
