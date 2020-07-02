@@ -1,4 +1,4 @@
-package com.citi.banking.BankingManagement.domain;
+package com.citi.banking.BankingManagement.entities;
 
 public enum AccountType {
     CHECKING,

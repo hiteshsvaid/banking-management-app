@@ -1,7 +1,8 @@
 package com.citi.banking.BankingManagement.controllers;
 
-import com.citi.banking.BankingManagement.domain.Account;
-import com.citi.banking.BankingManagement.domain.AccountType;
+import com.citi.banking.BankingManagement.entities.Account;
+import com.citi.banking.BankingManagement.entities.AccountType;
+import com.citi.banking.BankingManagement.services.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,12 +16,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/accounts")
 class AccountsController {
-    Logger log = LoggerFactory.getLogger(AccountsController.class);
+    private Logger log = LoggerFactory.getLogger(AccountsController.class);
+    private final AccountService accountService;
+
+    AccountsController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody List<Account> retrieveAccounts() {
-        log.info("Received request: {}");
-        return new ArrayList<Account>();
+        log.info("Received request");
+        return accountService.retrieveAccounts();
     }
 
     @GetMapping(path = {"/{accountId}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
