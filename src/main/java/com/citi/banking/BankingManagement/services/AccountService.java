@@ -10,14 +10,14 @@ import java.util.Optional;
 @Service
 public class AccountService {
 
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
     public List<Account> retrieveAccounts() {
-        return  this.accountRepository.findAll();
+        return this.accountRepository.findAll();
     }
 
     public Optional<Account> retrieveAccount(Long accountId) {

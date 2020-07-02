@@ -1,7 +1,6 @@
 package com.citi.banking.BankingManagement.controllers;
 
 import com.citi.banking.BankingManagement.entities.Account;
-import com.citi.banking.BankingManagement.entities.AccountType;
 import com.citi.banking.BankingManagement.exceptions.AccountNotFoundException;
 import com.citi.banking.BankingManagement.services.AccountService;
 import org.slf4j.Logger;
@@ -10,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
