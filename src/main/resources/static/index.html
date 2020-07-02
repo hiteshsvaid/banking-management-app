@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="/jquery-ui.min.css">
+    <link rel="stylesheet" href="/jquery-ui.theme.min.css">
     <script>
         var editor;
         $(document).ready(function(){
@@ -20,21 +23,26 @@
                     $("#customers_table tbody").append(markup);
                 });
             });
-            var customerId = 0;
+            function appendAccountToTable(id, type, amount, name){
+                var markup = 
+                            "<tr id=account_" + id+ "><td>" 
+                                + id +"</td><td>" 
+                                + name + "</td><td>" 
+                                + type 
+                                + "</td><td>" 
+                                + amount 
+                                + "</td><td><button type='button' class='delete-account btn btn-primary' id='" 
+                                + id + 
+                            "'>Delete</button></td></tr>";
+                        $("#accounts_table tbody").append(markup);
+            }
+            var customerId = 1;
             $(document).on("click", "#customers_table tr" , function() {
                 customerId = $(this).find("td.id").attr("id");
                 $("#accounts_table tbody").empty();
                 $.get("/customers/"+ customerId + "/accounts", function(data, status){
                     $.each( data, function( index, value ){
-                        var markup = 
-                            "<tr id=account_" + value.id+ "><td>" 
-                                + value.type 
-                                + "</td><td>" 
-                                + value.amount 
-                                + "</td><td><button type='button' class='delete-account btn btn-primary' id='" 
-                                + value.id + 
-                            "'>Delete</button></td></tr>";
-                        $("#accounts_table tbody").append(markup);
+                        appendAccountToTable(value.id, value.type, value.amount, value.nickName);
                     });
                 });
             });
@@ -48,6 +56,35 @@
                             $('#account_'+accountId).remove();
                         }
                     });
+            });
+            
+            $(document).on("click", "#account-create" , function() {
+                var createCustomerAccountUrl = "/customers/"+ customerId + "/accounts";                  
+                $("#modalform").dialog({                                                            //Shows dialog
+                    height: 250,
+                    width: 450,
+                    modal: true,
+                    buttons: {
+                        "Cancel": function() {
+                            $( this ).dialog( "close" );
+                        },
+                        "Save": function() {
+                            var data = {};
+                            $('#modalform').serializeArray().map(function(x){data[x.name] = x.value;})
+                            $.ajax({
+                                url: createCustomerAccountUrl,
+                                type:"POST",
+                                data: JSON.stringify(data),
+                                contentType:"application/json; charset=utf-8",
+                                dataType:"json",
+                                success: function(data){
+                                    appendAccountToTable(data.id, data.type, data.amount, data.nickName);
+                                }
+                            });
+                            $( this ).dialog( "close" );     
+                        }
+                    }
+                });   
             });
         });
     </script>
@@ -71,11 +108,12 @@
         </div>
         <div id="accounts" class="col-md-8">
             Accounts
-            <a class="editor_create">Create Account</a>
-
+            <button type='button' class='account-create btn btn-primary' id='account-create'>Create Account</button>
             <table id="accounts_table" class="table">
                 <thead>
                 <tr>
+                    <th>Account #</th>
+                    <th>Name</th>
                     <th>Type</th>
                     <th>Amount(USD)</th>
                     <th></th>
@@ -87,5 +125,19 @@
         </div>
     </div>
 </div>
+<form id="modalform" style="display:none">
+  <div class="form-group">
+    <label for="account-type">Choose Account type</label>
+    <select name="type" id="account-type" class="form-control">
+        <option value="CHECKING">Checking</option>
+        <option value="SAVINGS">Savings</option>
+        <option value="MONEY_MARKET">Money Market</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="nick-name">Nick Name</label>
+    <input type="text" class="form-control" id="nick-name" name="nickName" placeholder="Nick Name">
+  </div>
+</form>
 </body>
 </html>

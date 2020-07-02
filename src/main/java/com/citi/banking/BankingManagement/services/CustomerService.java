@@ -6,6 +6,7 @@ import com.citi.banking.BankingManagement.repositories.AccountRepository;
 import com.citi.banking.BankingManagement.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,5 +38,13 @@ public class CustomerService {
         account.setId(accountId);
         account.setCustomer(customer);
         this.accountRepository.delete(account);
+    }
+
+    public Account createCustomerAccount(Long customerId, Account account) {
+        Customer customer = new Customer();
+        customer.setId(customerId);
+        account.setCustomer(customer);
+        account.setAmount(new BigDecimal(0));
+        return this.accountRepository.save(account);
     }
 }
