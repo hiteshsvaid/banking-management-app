@@ -22,15 +22,22 @@ public class LoadDatabase {
         return args -> {
 
             Customer customer = createCustomer("John", "Doe", "123 Hollow Street", "898099321", "829-292-9998");
-//            customer.setAccounts(accounts);
             log.info("Preloading " + customerRepository.save(customer));
+            accountRepository.save(createAccount(customer, new BigDecimal(3200), AccountType.CHECKING));
+            accountRepository.save(createAccount(customer, new BigDecimal(4500), AccountType.MONEY_MARKET));
 
-            Account account = new Account();
-            account.setType(AccountType.CHECKING);
-            account.setAmount(new BigDecimal(200));
-            account.setCustomer(customer);
-            accountRepository.save(account);
+            Customer customer2 = createCustomer("Smith", "Thomson", "232 Hidden Street", "823099321", "729-292-9965");
+            log.info("Preloading " + customerRepository.save(customer2));
+            accountRepository.save(createAccount(customer2, new BigDecimal(300), AccountType.SAVINGS));
         };
+    }
+
+    private Account createAccount(Customer customer, BigDecimal amount, AccountType accountType) {
+        Account account = new Account();
+        account.setType(accountType);
+        account.setAmount(amount);
+        account.setCustomer(customer);
+        return account;
     }
 
     private Customer createCustomer(String firstName, String lastName, String address, String phoneNumber, String socialSecurityNumber) {
