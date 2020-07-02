@@ -3,6 +3,8 @@ package com.citi.banking.BankingManagement.utils;
 import com.citi.banking.BankingManagement.entities.Account;
 import com.citi.banking.BankingManagement.entities.AccountType;
 import com.citi.banking.BankingManagement.entities.Customer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -37,4 +39,10 @@ public class TestDataCreator {
         customer.setFirstName("Thomson");
         return customer;
     }
+
+//    public static void main(String[] args) {
+//        Gson gson = new GsonBuilder().create(); // pretty print
+//        String prettyJson = gson.toJson(TestDataCreator.createMockAccount());
+//        System.out.println(prettyJson);
+//    }
 }

@@ -38,4 +38,11 @@ public class CustomerService {
         account.setCustomer(customer);
         this.accountRepository.delete(account);
     }
+
+    public Account createCustomerAccount(Long customerId, Account account) {
+        Customer customer = new Customer();
+        customer.setId(customerId);
+        account.setCustomer(customer);
+        return this.accountRepository.save(account);
+    }
 }

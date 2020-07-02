@@ -20,21 +20,24 @@
                     $("#customers_table tbody").append(markup);
                 });
             });
+            function appendAccountToTable(id, type, amount){
+                var markup = 
+                            "<tr id=account_" + id+ "><td>" 
+                                + type 
+                                + "</td><td>" 
+                                + amount 
+                                + "</td><td><button type='button' class='delete-account btn btn-primary' id='" 
+                                + id + 
+                            "'>Delete</button></td></tr>";
+                        $("#accounts_table tbody").append(markup);
+            }
             var customerId = 0;
             $(document).on("click", "#customers_table tr" , function() {
                 customerId = $(this).find("td.id").attr("id");
                 $("#accounts_table tbody").empty();
                 $.get("/customers/"+ customerId + "/accounts", function(data, status){
                     $.each( data, function( index, value ){
-                        var markup = 
-                            "<tr id=account_" + value.id+ "><td>" 
-                                + value.type 
-                                + "</td><td>" 
-                                + value.amount 
-                                + "</td><td><button type='button' class='delete-account btn btn-primary' id='" 
-                                + value.id + 
-                            "'>Delete</button></td></tr>";
-                        $("#accounts_table tbody").append(markup);
+                        appendAccountToTable(value.id, value.type, value.amount);
                     });
                 });
             });
@@ -48,6 +51,21 @@
                             $('#account_'+accountId).remove();
                         }
                     });
+            });
+            $(document).on("click", "#account-create" , function() {
+                var createCustomerAccountUrl = "/customers/"+ customerId + "/accounts";
+                var data = '{"type":"CHECKING","amount":200}';
+                $.ajax({
+                    url: createCustomerAccountUrl,
+                    type:"POST",
+                    data: data,
+                    contentType:"application/json; charset=utf-8",
+                    dataType:"json",
+                    success: function(data){
+                        appendAccountToTable("9", "CHECKING", "200");
+                    }
+                });
+                    
             });
         });
     </script>
@@ -71,8 +89,7 @@
         </div>
         <div id="accounts" class="col-md-8">
             Accounts
-            <a class="editor_create">Create Account</a>
-
+            <button type='button' class='account-create btn btn-primary' id='account-create'>Create Account</button>
             <table id="accounts_table" class="table">
                 <thead>
                 <tr>

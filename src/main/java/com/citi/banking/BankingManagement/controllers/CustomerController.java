@@ -40,4 +40,11 @@ public class CustomerController {
         log.info("DeleteAccount: {} For Customer with ID: {}", customerId, accountId);
         customerService.deleteCustomerAccount(customerId, accountId);
     }
+
+    @PostMapping(path = {"/{customerId}/accounts"}, consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseStatus(HttpStatus.CREATED)
+    public Account createNewCustomerAccount(@PathVariable(value = "customerId") Long customerId, @RequestBody Account account) {
+        log.info("CreateNewCustomer with customer id: {} with account details: {}", customerId, account);
+        return customerService.createCustomerAccount(customerId, account);
+    }
 }

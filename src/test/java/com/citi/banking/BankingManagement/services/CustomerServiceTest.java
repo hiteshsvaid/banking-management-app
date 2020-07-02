@@ -62,4 +62,16 @@ public class CustomerServiceTest {
         customerService.deleteCustomerAccount(1L, 5L);
         Mockito.verify(accountRepository, times(1)).delete(account);
     }
+
+    @Test
+    public void createCustomerAccountTest() {
+        Account inputAccount = TestDataCreator.createMockAccount();
+        Account responseAccount = customerService.createCustomerAccount(3L, inputAccount);
+
+        Account verifyAccount = TestDataCreator.createMockAccount();
+        Customer customer = new Customer();
+        customer.setId(3L);
+        verifyAccount.setCustomer(customer);
+        Mockito.verify(accountRepository, times(1)).save(verifyAccount);
+    }
 }
