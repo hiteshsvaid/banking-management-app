@@ -29,7 +29,7 @@
                                         + individualCustomerUrl +"'><td>" 
                                         + value.firstName + "</td><td>" + 
                                         value.lastName + 
-                            "</td><td><button type='button' class='edit-customer-ssn btn btn-primary'>Edit SSN</button></td></tr>";
+                            "</td><td><div class='btn-group'><button type='button' class='edit-customer-ssn btn btn-link'>Edit SSN</button></div></td></tr>";
                         $("#customers_table tbody").append(markup);
                     });
                 });
@@ -48,9 +48,9 @@
                                 + type 
                                 + "</td><td>" 
                                 + amount 
-                                + "</td><td><button type='button' class='delete-account btn btn-primary' id='" 
+                                + "</td><td><button type='button' class='delete-account btn btn-danger' id='" 
                                 + id + 
-                            "'>Delete</button><button type='button' class='edit-account btn btn-primary'>Edit</button></td></tr>";
+                            "'>Delete</button><button type='button' class='edit-account btn btn-link'>Edit</button></td></tr>";
                 $("#accounts_table tbody").append(markup);
             }
 
@@ -265,7 +265,7 @@
     <div class="container">
         <div class="row">
             <div id="customers" class="col-md-4">
-                Customers
+                <h4>Customers</h4>
                 <table id="customers_table"  class="table">
                     <thead>
                     <tr>
@@ -278,9 +278,11 @@
                 </table>
             </div>
             <div id="accounts" class="col-md-8">
-                Accounts
-                <button type='button' class='account-create btn btn-primary' id='account-create'>Create Account</button>
-                <button type='button' class='account-transfer btn btn-primary' id='account-transfer'>Tranfer Fund</button>
+                <h4>Accounts</h4>
+                <div class="btn-group">
+                    <button type='button' class='account-create btn btn-link' id='account-create'>Create Account</button>
+                    <button type='button' class='account-transfer btn btn-link' id='account-transfer'>Tranfer Fund</button>
+                </div>
                 <table id="accounts_table" class="table">
                     <thead>
                     <tr>
