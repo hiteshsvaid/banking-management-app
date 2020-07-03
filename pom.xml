@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.citi.banking</groupId>
     <artifactId>BankingManagement</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>3.0.0</version>
     <name>BankingManagement</name>
     <description>
         Application with web view and rest services to support management of customer accounts
