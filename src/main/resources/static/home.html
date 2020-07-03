@@ -28,7 +28,7 @@
                                         + individualCustomerUrl +"'><td>" 
                                         + value.firstName + "</td><td>" + 
                                         value.lastName + 
-                            "</td></tr>";
+                            "</td><td><button type='button' class='edit-customer-ssn btn btn-primary'>Edit SSN</button></td></tr>";
                         $("#customers_table tbody").append(markup);
                     });
                 });
@@ -62,6 +62,43 @@
                 });
             }
 
+            // Edit Customer SSN
+            $(document).on("click", ".edit-customer-ssn" , function() {
+                $("#edit-customer-ssn").dialog({                                                            //Shows dialog
+                    height: 250,
+                    width: 450,
+                    modal: true,
+                    buttons: {
+                        "Cancel": function() {
+                            $( this ).dialog( "close" );
+                        },
+                        "Save": function() {  
+                            var data = {};
+                            $('#edit-customer-ssn').serializeArray().map(function(x){data[x.name] = x.value;})
+
+                            $.ajax({
+                                url: selectedCustomerUrl,
+                                type: 'GET',
+                                success: function(existingCustomerResult) {
+                                    existingCustomerResult.socialSecurityNumber = data.socialSecurityNumber;
+                                    $.ajax({
+                                        url: selectedCustomerUrl,
+                                        type:"PUT",
+                                        data: JSON.stringify(existingCustomerResult),
+                                        contentType:"application/json; charset=utf-8",
+                                        success: function(result){
+                                        }
+                                    });
+                                }
+                            });
+
+                            $( this ).dialog( "close" );     
+                        }
+                    }
+                }); 
+            });
+
+            // Read Accounts
             $(document).on("click", "#customers_table tr" , function() {
                 selectedCustomerUrl = $(this).attr("self"); 
                 selectedCustomerAccountUrl = $(this).attr("id");
@@ -161,60 +198,67 @@
     </script>
 </head>
 <body>
-<h1>Welcome to the Banking Application.</h1>
-<div class="container">
-    <div class="row">
-        <div id="customers" class="col-md-4">
-            Customers
-            <table id="customers_table"  class="table">
-                <thead>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-        <div id="accounts" class="col-md-8">
-            Accounts
-            <button type='button' class='account-create btn btn-primary' id='account-create'>Create Account</button>
-            <table id="accounts_table" class="table">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Amount(USD)</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+    <h1>Welcome to the Banking Application.</h1>
+    <div class="container">
+        <div class="row">
+            <div id="customers" class="col-md-4">
+                Customers
+                <table id="customers_table"  class="table">
+                    <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div id="accounts" class="col-md-8">
+                Accounts
+                <button type='button' class='account-create btn btn-primary' id='account-create'>Create Account</button>
+                <table id="accounts_table" class="table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Amount(USD)</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
-<form id="modalform" style="display:none">
-  <div class="form-group">
-    <label for="account-type">Choose Account type</label>
-    <select name="type" id="account-type" class="form-control">
-        <option value="CHECKING">Checking</option>
-        <option value="SAVINGS">Savings</option>
-        <option value="MONEY_MARKET">Money Market</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="nick-name">Nick Name</label>
-    <input type="text" class="form-control" id="nick-name" name="nickName" placeholder="Nick Name">
-  </div>
-</form>
-
-<form id="edit-account-form" style="display:none">
+    <form id="modalform" style="display:none">
     <div class="form-group">
-      <label for="nick-name">New Nick Name</label>
-      <input type="text" class="form-control" id="edit-nick-name" name="nickName" placeholder="New Nick Name">
+        <label for="account-type">Choose Account type</label>
+        <select name="type" id="account-type" class="form-control">
+            <option value="CHECKING">Checking</option>
+            <option value="SAVINGS">Savings</option>
+            <option value="MONEY_MARKET">Money Market</option>
+        </select>
     </div>
-  </form>
+    <div class="form-group">
+        <label for="nick-name">Nick Name</label>
+        <input type="text" class="form-control" id="nick-name" name="nickName" placeholder="Nick Name">
+    </div>
+    </form>
+
+    <form id="edit-account-form" style="display:none">
+        <div class="form-group">
+            <label for="nick-name">New Nick Name</label>
+            <input type="text" class="form-control" id="edit-nick-name" name="nickName" placeholder="New Nick Name">
+        </div>
+    </form>
+
+    <form id="edit-customer-ssn" style="display:none">
+        <div class="form-group">
+            <label for="edit-cust-ssn">New SSN</label>
+            <input type="text" class="form-control" id="edit-cust-ssn" name="socialSecurityNumber" placeholder="New SSN">
+        </div>
+    </form>
 </body>
 </html>

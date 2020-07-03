@@ -61,3 +61,58 @@ reburied field.
 ```text
 Field error in object 'Account' on field 'nickName': rejected value []; codes [nickName.empty.Account.nickName,nickName.empty.nickName,nickName.empty.java.lang.String,nickName.empty]; arguments []; default message [null]
 ```
+
+
+### Customer APIs
+#### Read: To get all accounts for all customers go to http://localhost:8080/accounts
+```json
+{
+    "_embedded": {
+        "customers": [
+            {
+                "firstName": "John",
+                "lastName": "Doe",
+                "address": "123 Hollow Street",
+                "phoneNumber": "898099321",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/customers/1"
+                    },
+                    "customer": {
+                        "href": "http://localhost:8080/customers/1"
+                    },
+                    "accounts": {
+                        "href": "http://localhost:8080/customers/1/accounts"
+                    }
+                }
+            },
+            {
+                "firstName": "Smith",
+                "lastName": "Thomson",
+                "address": "232 Hidden Street",
+                "phoneNumber": "823099321",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/customers/2"
+                    },
+                    "customer": {
+                        "href": "http://localhost:8080/customers/2"
+                    },
+                    "accounts": {
+                        "href": "http://localhost:8080/customers/2/accounts"
+                    }
+                }
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "http://localhost:8080/customers"
+        },
+        "profile": {
+            "href": "http://localhost:8080/profile/customers"
+        }
+    }
+}
+```
+
