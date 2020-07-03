@@ -24,16 +24,15 @@ com.citi.banking.BankingManagement
 ```
 
 ### Build
-
 #### This project uses [Maven](http://maven.apache.org/) for dependency management. Clone this repository and execute:
 ```bash
 $:> mvn install
 ```
-
 #### Sample runnable application jar has been checked in to enable quick application launching.
 ```
 $:> java -jar BankingManagement-3.0.0.jar
 ```
+Goto http://localhost:8080/home.html after above command.
 ## Views
 
 ### Home Page
