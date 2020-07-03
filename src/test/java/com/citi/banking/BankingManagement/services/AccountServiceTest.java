@@ -2,7 +2,7 @@ package com.citi.banking.BankingManagement.services;
 
 import com.citi.banking.BankingManagement.entities.Account;
 import com.citi.banking.BankingManagement.entities.AccountType;
-import com.citi.banking.BankingManagement.exceptions.AccountInSufficientBalanceException;
+import com.citi.banking.BankingManagement.exceptions.AccountInSufficientFundException;
 import com.citi.banking.BankingManagement.exceptions.AccountNotFoundException;
 import com.citi.banking.BankingManagement.repositories.AccountRepository;
 import com.citi.banking.BankingManagement.utils.TestDataCreator;
@@ -15,7 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -75,7 +74,7 @@ public class AccountServiceTest {
 
         BigDecimal transferAmount = new BigDecimal(200);
 
-        Assertions.assertThrows(AccountInSufficientBalanceException.class, () -> {
+        Assertions.assertThrows(AccountInSufficientFundException.class, () -> {
             accountService.transferFunds(1L, 3L, transferAmount);
         });
     }
