@@ -10,13 +10,14 @@
     <link rel="stylesheet" href="/jquery-ui.min.css">
     <link rel="stylesheet" href="/jquery-ui.theme.min.css">
     <script>
-        $(document).ready(function(){
+        $(document).ready(function(){        
             var accountUrl = "";
             var customerUrl = "";
 
             var selectedCustomerUrl = "";
             var selectedCustomerAccountUrl = "";
 
+            
             $.get("../", function(data, status){
                 accountUrl = data._links.accounts.href;
                 customerUrl = data._links.customers.href;
@@ -34,6 +35,11 @@
                 });
             });
 
+            function disableAccountActionButtons(value){
+                $('#account-create').prop('disabled', value);
+                $('#account-transfer').prop('disabled', value);
+            }
+            disableAccountActionButtons(true);
             
             function appendAccountToTable(id, type, amount, name){
                 var markup = 
@@ -102,6 +108,7 @@
             $(document).on("click", "#customers_table tr" , function() {
                 selectedCustomerUrl = $(this).attr("self"); 
                 selectedCustomerAccountUrl = $(this).attr("id");
+                disableAccountActionButtons(false);
                 reloadCustomerAccounts(selectedCustomerAccountUrl);
             });
             
