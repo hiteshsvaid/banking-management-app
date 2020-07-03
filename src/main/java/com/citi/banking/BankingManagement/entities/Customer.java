@@ -22,4 +22,16 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     @RestResource(path = "accounts", rel="accounts")
     private List<Account> accounts;
+
+    // Overwritten To String method to avoid printing SSN in logs due to PII regulations.
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
 }

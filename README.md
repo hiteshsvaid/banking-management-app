@@ -19,8 +19,21 @@ com.citi.banking.BankingManagement
 8. Twitter Bootstrap
 9. HTML
 10. CSS
+11. Lombok
+12. IntelliJ with Lombok plugin and annotation processing.
 ```
 
+### Build
+
+#### This project uses [Maven](http://maven.apache.org/) for dependency management. Clone this repository and execute:
+```bash
+$:> mvn install
+```
+
+#### Sample runnable application jar has been checked in to enable quick application launching.
+```
+$:> java -jar BankingManagement-3.0.0.jar
+```
 ## Views
 
 ### Home Page
