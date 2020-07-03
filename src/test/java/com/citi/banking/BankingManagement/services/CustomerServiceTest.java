@@ -35,25 +35,6 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void retrieveCustomersTest() {
-        when(customerRepository.findAll()).thenReturn(TestDataCreator.createMockCustomers());
-        List<Customer> customers = customerService.retrieveCustomers();
-        Mockito.verify(customerRepository, times(1)).findAll();
-        assertEquals(1, customers.size());
-    }
-
-    @Test
-    public void retrieveAccountsForCustomerTest() {
-        Customer testCustomer = new Customer();
-        testCustomer.setId(10L);
-        when(accountRepository.findByCustomer(testCustomer))
-                .thenReturn(TestDataCreator.createMockAccounts());
-        List<Account> accounts = customerService.retrieveAccountsForCustomer(10L);
-        Mockito.verify(accountRepository, times(1)).findByCustomer(testCustomer);
-        assertEquals(1, accounts.size());
-    }
-
-    @Test
     public void deleteCustomerAccountTest() {
         Customer customer = new Customer();
         customer.setId(1L);

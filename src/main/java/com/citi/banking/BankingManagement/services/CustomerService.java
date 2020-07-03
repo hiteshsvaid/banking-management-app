@@ -21,16 +21,6 @@ public class CustomerService {
         this.accountRepository = accountRepository;
     }
 
-    public List<Customer> retrieveCustomers() {
-        return this.customerRepository.findAll();
-    }
-
-    public List<Account> retrieveAccountsForCustomer(Long customerId) {
-        Customer customer = new Customer();
-        customer.setId(customerId);
-        return this.accountRepository.findByCustomer(customer);
-    }
-
     public void deleteCustomerAccount(Long customerId, Long accountId) {
         Customer customer = new Customer();
         customer.setId(customerId);

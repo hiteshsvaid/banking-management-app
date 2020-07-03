@@ -18,7 +18,7 @@ public class Account {
     private BigDecimal amount;
     private String nickName;
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "customer_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 }

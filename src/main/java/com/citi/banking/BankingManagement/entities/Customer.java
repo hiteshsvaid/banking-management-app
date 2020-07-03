@@ -2,11 +2,10 @@ package com.citi.banking.BankingManagement.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.data.rest.core.annotation.RestResource;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,4 +19,7 @@ public class Customer {
     private String phoneNumber;
     @JsonIgnore
     private String socialSecurityNumber;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @RestResource(path = "accounts", rel="accounts")
+    private List<Account> accounts;
 }

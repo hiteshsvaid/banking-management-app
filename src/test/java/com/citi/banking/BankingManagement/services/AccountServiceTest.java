@@ -33,14 +33,6 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void retrieveAccountsTest() {
-        when(accountRepository.findAll()).thenReturn(TestDataCreator.createMockAccounts());
-        List<Account> accounts = accountService.retrieveAccounts();
-        Mockito.verify(accountRepository, times(1)).findAll();
-        assertEquals(1, accounts.size());
-    }
-
-    @Test
     public void retrieveAccountTest() {
         when(accountRepository.findById(3L)).thenReturn(Optional.of(TestDataCreator.createMockAccount()));
         Optional<Account> account = accountService.retrieveAccount(3L);

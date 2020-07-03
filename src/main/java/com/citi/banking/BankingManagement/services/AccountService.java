@@ -16,10 +16,6 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public List<Account> retrieveAccounts() {
-        return this.accountRepository.findAll();
-    }
-
     public Optional<Account> retrieveAccount(Long accountId) {
         return this.accountRepository.findById(accountId);
     }
