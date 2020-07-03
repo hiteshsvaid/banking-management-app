@@ -14,5 +14,4 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "accounts", path = "accounts")
 public interface AccountRepository extends CrudRepository<Account, Long> {
     List<Account> findByCustomer(Customer customer);
-    void updateAmount(BigDecimal amount);
 }

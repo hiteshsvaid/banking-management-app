@@ -1,6 +1,7 @@
 package com.citi.banking.BankingManagement.services;
 
 import com.citi.banking.BankingManagement.entities.Account;
+import com.citi.banking.BankingManagement.exceptions.AccountInSufficientBalanceException;
 import com.citi.banking.BankingManagement.exceptions.AccountNotFoundException;
 import com.citi.banking.BankingManagement.repositories.AccountRepository;
 import org.springframework.stereotype.Service;
@@ -52,11 +53,12 @@ public class AccountService {
         Optional<Account> accountOptional = accountRepository.findById(id);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
-            account.getAmount();
             if (transferAmount.compareTo(account.getAmount()) == 1) {
-
+                throw new AccountInSufficientBalanceException();
             } else {
-                System.out.println("Insufficient balance");
+                BigDecimal newBalance = account.getAmount().subtract(transferAmount);
+                account.setAmount(newBalance);
+                accountRepository.save(account);
             }
         } else {
             throw new AccountNotFoundException(id);
@@ -67,12 +69,9 @@ public class AccountService {
         Optional<Account> accountOptional = accountRepository.findById(id);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
-            account.getAmount();
-            if (transferAmount.compareTo(account.getAmount()) == 1) {
-
-            } else {
-                System.out.println("Insufficient balance");
-            }
+            BigDecimal newBalance = account.getAmount().add(transferAmount);
+            account.setAmount(newBalance);
+            accountRepository.save(account);
         } else {
             throw new AccountNotFoundException(id);
         }

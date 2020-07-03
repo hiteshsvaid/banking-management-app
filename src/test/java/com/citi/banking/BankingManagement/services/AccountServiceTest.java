@@ -2,6 +2,7 @@ package com.citi.banking.BankingManagement.services;
 
 import com.citi.banking.BankingManagement.entities.Account;
 import com.citi.banking.BankingManagement.entities.AccountType;
+import com.citi.banking.BankingManagement.exceptions.AccountInSufficientBalanceException;
 import com.citi.banking.BankingManagement.exceptions.AccountNotFoundException;
 import com.citi.banking.BankingManagement.repositories.AccountRepository;
 import com.citi.banking.BankingManagement.utils.TestDataCreator;
@@ -64,6 +65,33 @@ public class AccountServiceTest {
         Assertions.assertThrows(AccountNotFoundException.class, () -> {
             accountService.transferFunds(1L, 3L, transferAmount);
         });
+    }
+
+    @Test
+    public void transferBetweenAccountTestInsufficientBalanceInToAccount() {
+        fromAccount.setAmount(new BigDecimal(100));
+        when(accountRepository.findById(fromAccount.getId())).thenReturn(Optional.of(fromAccount));
+        when(accountRepository.findById(toAccount.getId())).thenReturn(Optional.of(toAccount));
+
+        BigDecimal transferAmount = new BigDecimal(200);
+
+        Assertions.assertThrows(AccountInSufficientBalanceException.class, () -> {
+            accountService.transferFunds(1L, 3L, transferAmount);
+        });
+    }
+
+    @Test
+    public void transferBetweenAccountTestSuccess() {
+        fromAccount.setAmount(new BigDecimal(400));
+        toAccount.setAmount(new BigDecimal(200));
+        when(accountRepository.findById(fromAccount.getId())).thenReturn(Optional.of(fromAccount));
+        when(accountRepository.findById(toAccount.getId())).thenReturn(Optional.of(toAccount));
+
+        BigDecimal transferAmount = new BigDecimal(100);
+
+        accountService.transferFunds(fromAccount.getId(), toAccount.getId(), transferAmount);
+
+        Mockito.verify(accountRepository, times(1)).save(fromAccount);
     }
 
     @Test
