@@ -15,6 +15,7 @@
             var customerUrl = "";
 
             var selectedCustomerUrl = "";
+            var selectedCustomerAccountUrl = "";
 
             $.get("../", function(data, status){
                 accountUrl = data._links.accounts.href;
@@ -43,25 +44,31 @@
                                 + amount 
                                 + "</td><td><button type='button' class='delete-account btn btn-primary' id='" 
                                 + id + 
-                            "'>Delete</button></td></tr>";
+                            "'>Delete</button><button type='button' class='edit-account btn btn-primary'>Edit</button></td></tr>";
                         $("#accounts_table tbody").append(markup);
             }
-            var customerId = 1;
+
+            function reloadCustomerAccounts(customerAccountUrl){
+                $("#accounts_table tbody").empty();
+
+                $.ajax({
+                    url: customerAccountUrl,
+                    type: 'GET',
+                    success: function(result) {
+                        $.each(result._embedded.accounts, function( index, value ){
+                            appendAccountToTable(value._links.self.href, value.type, value.amount, value.nickName);
+                        });
+                    }
+                });
+            }
+
             $(document).on("click", "#customers_table tr" , function() {
                 selectedCustomerUrl = $(this).attr("self"); 
-                var customerAccountUrl = $(this).attr("id");
-                $("#accounts_table tbody").empty();
-                $.ajax({
-                        url: customerAccountUrl,
-                        type: 'GET',
-                        success: function(result) {
-                            $.each(result._embedded.accounts, function( index, value ){
-                                appendAccountToTable(value._links.self.href, value.type, value.amount, value.nickName);
-                            });
-                        }
-                    });
-               
+                selectedCustomerAccountUrl = $(this).attr("id");
+                reloadCustomerAccounts(selectedCustomerAccountUrl);
             });
+            
+            // Delete Account
             $(document).on("click", ".delete-account" , function() {
                 var accountUrl = $(this).attr("id");
                 var parentTr = $(this).closest('tr');
@@ -74,6 +81,45 @@
                     });
             });
             
+            // Edit Account
+            $(document).on("click", ".edit-account" , function() {
+                var parentTr = $(this).closest('tr');
+                var accountUrl = parentTr.attr("id");
+                $("#edit-account-form").dialog({                                                            //Shows dialog
+                    height: 250,
+                    width: 450,
+                    modal: true,
+                    buttons: {
+                        "Cancel": function() {
+                            $( this ).dialog( "close" );
+                        },
+                        "Save": function() {  
+                            var data = {};
+                            $('#edit-account-form').serializeArray().map(function(x){data[x.name] = x.value;})
+
+                            $.ajax({
+                                url: accountUrl,
+                                type: 'GET',
+                                success: function(existingAccountResult) {
+                                    existingAccountResult.nickName = data.nickName;
+                                    $.ajax({
+                                        url: accountUrl,
+                                        type:"PUT",
+                                        data: JSON.stringify(existingAccountResult),
+                                        contentType:"application/json; charset=utf-8",
+                                        success: function(result){
+                                            reloadCustomerAccounts(selectedCustomerAccountUrl);
+                                        }
+                                    });
+                                }
+                            });
+                            $( this ).dialog( "close" );     
+                        }
+                    }
+                });   
+            });
+
+            // Create Account
             $(document).on("click", "#account-create" , function() {
                 $("#modalform").dialog({                                                            //Shows dialog
                     height: 250,
@@ -163,5 +209,12 @@
     <input type="text" class="form-control" id="nick-name" name="nickName" placeholder="Nick Name">
   </div>
 </form>
+
+<form id="edit-account-form" style="display:none">
+    <div class="form-group">
+      <label for="nick-name">New Nick Name</label>
+      <input type="text" class="form-control" id="edit-nick-name" name="nickName" placeholder="New Nick Name">
+    </div>
+  </form>
 </body>
 </html>
