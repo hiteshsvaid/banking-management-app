@@ -10,23 +10,33 @@
     <link rel="stylesheet" href="/jquery-ui.min.css">
     <link rel="stylesheet" href="/jquery-ui.theme.min.css">
     <script>
-        var editor;
         $(document).ready(function(){
-            $.get("/customers", function(data, status){
-                $.each( data, function( index, value ){
-                    var markup = 
-                        "<tr><td class='id' id='" 
-                                    + value.id + "'>" 
-                                    + value.firstName + "</td><td>" + 
-                                    value.lastName + 
-                        "</td></tr>";
-                    $("#customers_table tbody").append(markup);
+            var accountUrl = "";
+            var customerUrl = "";
+
+            var selectedCustomerUrl = "";
+
+            $.get("../", function(data, status){
+                accountUrl = data._links.accounts.href;
+                customerUrl = data._links.customers.href;
+                $.get(customerUrl, function(data, status){
+                    $.each( data._embedded.customers, function( index, value ){
+                        var individualCustomerUrl = value._links.self.href;
+                        var markup = 
+                            "<tr id='" + value._links.accounts.href + "' self='" 
+                                        + individualCustomerUrl +"'><td>" 
+                                        + value.firstName + "</td><td>" + 
+                                        value.lastName + 
+                            "</td></tr>";
+                        $("#customers_table tbody").append(markup);
+                    });
                 });
             });
+
+            
             function appendAccountToTable(id, type, amount, name){
                 var markup = 
-                            "<tr id=account_" + id+ "><td>" 
-                                + id +"</td><td>" 
+                            "<tr id='" + id+ "'><td>" 
                                 + name + "</td><td>" 
                                 + type 
                                 + "</td><td>" 
@@ -38,28 +48,33 @@
             }
             var customerId = 1;
             $(document).on("click", "#customers_table tr" , function() {
-                customerId = $(this).find("td.id").attr("id");
+                selectedCustomerUrl = $(this).attr("self"); 
+                var customerAccountUrl = $(this).attr("id");
                 $("#accounts_table tbody").empty();
-                $.get("/customers/"+ customerId + "/accounts", function(data, status){
-                    $.each( data, function( index, value ){
-                        appendAccountToTable(value.id, value.type, value.amount, value.nickName);
+                $.ajax({
+                        url: customerAccountUrl,
+                        type: 'GET',
+                        success: function(result) {
+                            $.each(result._embedded.accounts, function( index, value ){
+                                appendAccountToTable(value._links.self.href, value.type, value.amount, value.nickName);
+                            });
+                        }
                     });
-                });
+               
             });
             $(document).on("click", ".delete-account" , function() {
-                var accountId = $(this).attr("id");
-                var deleteCustomerAccountUrl = "/customers/"+ customerId + "/accounts/" + accountId;
+                var accountUrl = $(this).attr("id");
+                var parentTr = $(this).closest('tr');
                 $.ajax({
-                        url: deleteCustomerAccountUrl,
+                        url: accountUrl,
                         type: 'DELETE',
                         success: function(result) {
-                            $('#account_'+accountId).remove();
+                            parentTr.remove();
                         }
                     });
             });
             
             $(document).on("click", "#account-create" , function() {
-                var createCustomerAccountUrl = "/customers/"+ customerId + "/accounts";                  
                 $("#modalform").dialog({                                                            //Shows dialog
                     height: 250,
                     width: 450,
@@ -72,13 +87,23 @@
                             var data = {};
                             $('#modalform').serializeArray().map(function(x){data[x.name] = x.value;})
                             $.ajax({
-                                url: createCustomerAccountUrl,
+                                url: accountUrl,
                                 type:"POST",
                                 data: JSON.stringify(data),
                                 contentType:"application/json; charset=utf-8",
                                 dataType:"json",
-                                success: function(data){
-                                    appendAccountToTable(data.id, data.type, data.amount, data.nickName);
+                                success: function(result){
+                                    var associateAccountToCustomerUrl = result._links.customer.href;
+                                    var createdAccountUrl = result._links.self.href;
+                                    $.ajax({
+                                        url: associateAccountToCustomerUrl,
+                                        type:"PUT",
+                                        data: selectedCustomerUrl,
+                                        contentType:"text/uri-list; charset=utf-8",
+                                        success: function(result){
+                                            appendAccountToTable(createdAccountUrl, data.type, 0, data.nickName);
+                                        }
+                                    });
                                 }
                             });
                             $( this ).dialog( "close" );     
@@ -112,7 +137,6 @@
             <table id="accounts_table" class="table">
                 <thead>
                 <tr>
-                    <th>Account #</th>
                     <th>Name</th>
                     <th>Type</th>
                     <th>Amount(USD)</th>
