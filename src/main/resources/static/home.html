@@ -197,14 +197,21 @@
 
             // Tranfer Fund
             $(document).on("click", "#account-transfer" , function() {
+                $("#from-account-select").empty();
+                $("#to-account-select").empty();
+
+                var noneOption = '<option value="None">Select Account</option>';
+                $("#from-account-select").append(noneOption);
+                $("#to-account-select").append(noneOption);
+
                 $.ajax({
                     url: selectedCustomerAccountUrl,
                     type: 'GET',
                     success: function(result) {
                         $.each(result._embedded.accounts, function( index, account ){
-                            console.log(account);
+                            var accountId = account._links.self.href.substring(account._links.self.href.lastIndexOf('/') + 1);
                             var markup = 
-                                        "<option value='" + account + "'>" + account.nickName + "</option>";
+                                        "<option value='" + accountId + "'>" + account.nickName + "</option>";
                             $("#from-account-select").append(markup);
                             $("#to-account-select").append(markup);
                         });
@@ -222,6 +229,22 @@
                         "Save": function() {
                             var fromAccount = $("#from-account-select").val();
                             var toAccount = $("#to-account-select").val();
+                            var transferAmount = $("#transfer-amount").val();
+                            var transferData = {
+                                    fromAccountId: fromAccount,
+                                    toAccountId: toAccount,
+                                    transferAmount: transferAmount
+                                };
+                            $.ajax({
+                                url: "/transfer",
+                                type:"POST",
+                                data: JSON.stringify(transferData),
+                                contentType:"application/json; charset=utf-8",
+                                dataType:"json",
+                                success: function(){
+                                    reloadCustomerAccounts(selectedCustomerAccountUrl);
+                                }
+                            });
                             $( this ).dialog( "close" );     
                         }
                     }
@@ -271,18 +294,16 @@
         <div class="form-group">
             <label for="from-account">From Account</label>
             <select name="type" id="from-account-select" class="form-control">
-                <option value="None">Select Account</option>
             </select>
         </div>
         <div class="form-group">
             <label for="to-account">To Account</label>
             <select name="type" id="to-account-select" class="form-control">
-                <option value="None">Select Account</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="transfer-account">Transfer Ammount</label>
-            <input type="text" class="form-control" id="transfer-account" name="transfer-account" placeholder="Transfer Amount">
+            <label for="transfer-amount">Transfer Ammount</label>
+            <input type="text" class="form-control" id="transfer-amount" name="transfer-account" placeholder="Transfer Amount">
         </div>
     </form>
 
