@@ -21,6 +21,20 @@ com.citi.banking.BankingManagement
 10. CSS
 ```
 
+## Views
+
+### Home Page
+![Alt text](docs/homePage.PNG?raw=true "Home Page")
+
+### Add Account Dialog
+![Alt text](docs/createAccount.PNG?raw=true "Add Account Dialog")
+
+### Edit Account Dialog
+![Alt text](docs/editAccount.PNG?raw=true "Edit Account Dialog")
+
+### Transfer Fund Dialog
+![Alt text](docs/transferFund.PNG?raw=true "Transfer Fund Dialog")
+
 ## Rest Endpoints
 This project uses Spring Data Rest and hence all entities the CRUD operations of the entities are exposed
 as REST API following REST API Best practices.
