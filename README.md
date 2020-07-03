@@ -46,7 +46,69 @@ http://localhost:8080/
 ### Account APIs
 
 #### Read: To get all accounts for all customers go to http://localhost:8080/accounts
-
+```json
+{
+  "_embedded" : {
+    "accounts" : [ {
+      "type" : "CHECKING",
+      "amount" : 3200.00,
+      "nickName" : "My Checking",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/accounts/1"
+        },
+        "account" : {
+          "href" : "http://localhost:8080/accounts/1"
+        },
+        "customer" : {
+          "href" : "http://localhost:8080/accounts/1/customer"
+        }
+      }
+    }, {
+      "type" : "MONEY_MARKET",
+      "amount" : 4500.00,
+      "nickName" : "Stock Account",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/accounts/2"
+        },
+        "account" : {
+          "href" : "http://localhost:8080/accounts/2"
+        },
+        "customer" : {
+          "href" : "http://localhost:8080/accounts/2/customer"
+        }
+      }
+    }, {
+      "type" : "SAVINGS",
+      "amount" : 300.00,
+      "nickName" : "My Saving",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/accounts/3"
+        },
+        "account" : {
+          "href" : "http://localhost:8080/accounts/3"
+        },
+        "customer" : {
+          "href" : "http://localhost:8080/accounts/3/customer"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/accounts"
+    },
+    "profile" : {
+      "href" : "http://localhost:8080/profile/accounts"
+    },
+    "search" : {
+      "href" : "http://localhost:8080/accounts/search"
+    }
+  }
+}
+```
 #### Create: For create post the following JSON to http://localhost:8080/accounts
 ```json
 {
