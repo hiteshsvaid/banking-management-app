@@ -109,7 +109,7 @@ http://localhost:8080/
   }
 }
 ```
-#### Create: For create post the following JSON to http://localhost:8080/accounts
+#### Create: For create POST the following JSON to http://localhost:8080/accounts
 ```json
 {
                 "type": "CHECKING",

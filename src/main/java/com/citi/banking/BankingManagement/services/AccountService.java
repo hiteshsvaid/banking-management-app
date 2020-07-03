@@ -1,9 +1,11 @@
 package com.citi.banking.BankingManagement.services;
 
 import com.citi.banking.BankingManagement.entities.Account;
+import com.citi.banking.BankingManagement.exceptions.AccountNotFoundException;
 import com.citi.banking.BankingManagement.repositories.AccountRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,5 +41,40 @@ public class AccountService {
 
     public void deleteAccount(Long accountId) {
         accountRepository.deleteById(accountId);
+    }
+
+    public void transferFunds(Long fromAccount, Long toAccount, BigDecimal transferAmount) {
+        this.withDraw(fromAccount, transferAmount);
+        this.deposit(toAccount, transferAmount);
+    }
+
+    public void withDraw(Long id, BigDecimal transferAmount) {
+        Optional<Account> accountOptional = accountRepository.findById(id);
+        if (accountOptional.isPresent()) {
+            Account account = accountOptional.get();
+            account.getAmount();
+            if (transferAmount.compareTo(account.getAmount()) == 1) {
+
+            } else {
+                System.out.println("Insufficient balance");
+            }
+        } else {
+            throw new AccountNotFoundException(id);
+        }
+    }
+
+    public void deposit(Long id, BigDecimal transferAmount) {
+        Optional<Account> accountOptional = accountRepository.findById(id);
+        if (accountOptional.isPresent()) {
+            Account account = accountOptional.get();
+            account.getAmount();
+            if (transferAmount.compareTo(account.getAmount()) == 1) {
+
+            } else {
+                System.out.println("Insufficient balance");
+            }
+        } else {
+            throw new AccountNotFoundException(id);
+        }
     }
 }
