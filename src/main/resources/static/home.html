@@ -45,7 +45,7 @@
                                 + "</td><td><button type='button' class='delete-account btn btn-primary' id='" 
                                 + id + 
                             "'>Delete</button><button type='button' class='edit-account btn btn-primary'>Edit</button></td></tr>";
-                        $("#accounts_table tbody").append(markup);
+                $("#accounts_table tbody").append(markup);
             }
 
             function reloadCustomerAccounts(customerAccountUrl){
@@ -158,7 +158,7 @@
 
             // Create Account
             $(document).on("click", "#account-create" , function() {
-                $("#modalform").dialog({                                                            //Shows dialog
+                $("#modalform").dialog({
                     height: 250,
                     width: 450,
                     modal: true,
@@ -194,6 +194,39 @@
                     }
                 });   
             });
+
+            // Tranfer Fund
+            $(document).on("click", "#account-transfer" , function() {
+                $.ajax({
+                    url: selectedCustomerAccountUrl,
+                    type: 'GET',
+                    success: function(result) {
+                        $.each(result._embedded.accounts, function( index, account ){
+                            console.log(account);
+                            var markup = 
+                                        "<option value='" + account + "'>" + account.nickName + "</option>";
+                            $("#from-account-select").append(markup);
+                            $("#to-account-select").append(markup);
+                        });
+                    }
+                });
+
+                $("#transfer-fund").dialog({
+                    height: 250,
+                    width: 450,
+                    modal: true,
+                    buttons: {
+                        "Cancel": function() {
+                            $( this ).dialog( "close" );
+                        },
+                        "Save": function() {
+                            var fromAccount = $("#from-account-select").val();
+                            var toAccount = $("#to-account-select").val();
+                            $( this ).dialog( "close" );     
+                        }
+                    }
+                }); 
+            });
         });
     </script>
 </head>
@@ -217,6 +250,7 @@
             <div id="accounts" class="col-md-8">
                 Accounts
                 <button type='button' class='account-create btn btn-primary' id='account-create'>Create Account</button>
+                <button type='button' class='account-transfer btn btn-primary' id='account-transfer'>Tranfer Fund</button>
                 <table id="accounts_table" class="table">
                     <thead>
                     <tr>
@@ -232,19 +266,39 @@
             </div>
         </div>
     </div>
+
+    <form id="transfer-fund" style="display:none">
+        <div class="form-group">
+            <label for="from-account">From Account</label>
+            <select name="type" id="from-account-select" class="form-control">
+                <option value="None">Select Account</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="to-account">To Account</label>
+            <select name="type" id="to-account-select" class="form-control">
+                <option value="None">Select Account</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="transfer-account">Transfer Ammount</label>
+            <input type="text" class="form-control" id="transfer-account" name="transfer-account" placeholder="Transfer Amount">
+        </div>
+    </form>
+
     <form id="modalform" style="display:none">
-    <div class="form-group">
-        <label for="account-type">Choose Account type</label>
-        <select name="type" id="account-type" class="form-control">
-            <option value="CHECKING">Checking</option>
-            <option value="SAVINGS">Savings</option>
-            <option value="MONEY_MARKET">Money Market</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="nick-name">Nick Name</label>
-        <input type="text" class="form-control" id="nick-name" name="nickName" placeholder="Nick Name">
-    </div>
+        <div class="form-group">
+            <label for="account-type">Choose Account type</label>
+            <select name="type" id="account-type" class="form-control">
+                <option value="CHECKING">Checking</option>
+                <option value="SAVINGS">Savings</option>
+                <option value="MONEY_MARKET">Money Market</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="nick-name">Nick Name</label>
+            <input type="text" class="form-control" id="nick-name" name="nickName" placeholder="Nick Name">
+        </div>
     </form>
 
     <form id="edit-account-form" style="display:none">
